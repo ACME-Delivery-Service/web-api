@@ -1,5 +1,5 @@
 # Web OpenAPI Specification
-[![Build Status](https://travis-ci.org/ratijas/web-api.svg?branch=master)](https://travis-ci.org/ratijas/web-api)
+[![Build Status](https://travis-ci.com/ratijas/web-api.svg?branch=master)](https://travis-ci.org/ratijas/web-api)
 
 ## Links
 
