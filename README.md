@@ -1,11 +1,11 @@
 # Web OpenAPI Specification
-[![Build Status](https://travis-ci.com/ratijas/web-api.svg?branch=master)](https://travis-ci.org/ratijas/web-api)
+[![Build Status](https://travis-ci.com/acme-delivery-service/web-api.svg?branch=master)](https://travis-ci.com/acme-delivery-service/web-api)
 
 ## Links
 
-- Documentation(ReDoc): https://ratijas.github.io/web-api/
-- SwaggerUI: https://ratijas.github.io/web-api/swagger-ui/
+- Documentation(ReDoc): https://acme-delivery-service.github.io/web-api/
+- SwaggerUI: https://acme-delivery-service.github.io/web-api/swagger-ui/
 - Look full spec:
-    + JSON https://ratijas.github.io/web-api/swagger.json
-    + YAML https://ratijas.github.io/web-api/swagger.yaml
+    + JSON https://acme-delivery-service.github.io/web-api/swagger.json
+    + YAML https://acme-delivery-service.github.io/web-api/swagger.yaml
 
