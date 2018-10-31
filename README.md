@@ -1,5 +1,5 @@
 # Web OpenAPI Specification
-[![Build Status](https://travis-ci.com/acme-delivery-service/web-api.svg?branch=master)](https://travis-ci.com/acme-delivery-service/web-api)
+[![Build Status](https://travis-ci.com/ACME-Delivery-Service/web-api.svg?branch=master)](https://travis-ci.com/ACME-Delivery-Service/web-api)
 
 ## Links
 
