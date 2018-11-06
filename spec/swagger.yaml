@@ -11,6 +11,9 @@ schemes: [ https ]
 host: "backend.acme-company.site"
 basePath: "/"
 
+security:
+- Token: []
+
 paths:
   /account/login:
     post:
@@ -18,23 +21,41 @@ paths:
       tags:
       - account
       consumes:
-      - 'application/x-www-form-urlencoded'
+      - 'multipart/form-data'
       parameters:
-      - name: 'login'
+      - name: 'email'
         in: formData
         type: string
       - name: 'password'
         in: formData
         type: string
+      produces:
+      - 'application/json'
+      # Override: this particular method does not require any top-level security scheme.
+      security: []
       responses:
         '200':
           description: "User succesfully logged in."
-          headers:
-            Authorization:
-              type: string
-              description: |
-                Authorization header with an API key. Browser will resend this
-                header upon next request automatically.
+          schema:
+            type: object
+            required:
+            - token
+            properties:
+              token:
+                type: string
+                description: |
+                  Authorization token to be used in the `Authorization` header for secured endpoints.
+          examples:
+            token: "4296c04b40a2e4da526f55d7b1f1dbc358a613b4"
+        '400':
+          description: "Bad request or invalid credentials"
+          schema:
+            $ref: '#/definitions/ErrorModel'
+          examples:
+            'Bad Request':
+              msg: "Please provide both email and password"
+            'Invalid Credentials':
+              msg: "Invalid login credentials"
 
   /account/logout:
     post:
@@ -44,24 +65,29 @@ paths:
       responses:
         '200':
           description: "Current user succesfully logged out of system."
-        '400':
-          description: "User not logged in."
+        '401':
+          $ref: '#/responses/Unauthorized'
+
   /account/info:
     get:
       summary: "Get information about current user."
       tags:
       - account
-      security:
-      - api_key: []
       produces:
       - 'application/json'
       responses:
         '200':
-          description: OK
+          description: "OK"
           schema:
             $ref: '#/definitions/User'
-        '400':
-          description: "User not logged in."
+        '401':
+          $ref: '#/responses/Unauthorized'
+
+responses:
+  Unauthorized:
+    description: "Unauthorized: User not logged in."
+    schema:
+      $ref: '#/definitions/ErrorModel'
 
 definitions:
   User:
@@ -70,7 +96,7 @@ definitions:
     - user_id
     - user_location
     - email
-    - contact
+    - contacts
     properties:
       user_id:
         type: integer
@@ -79,7 +105,7 @@ definitions:
       email:
         type: string
         format: email
-      contact:
+      contacts:
         $ref: '#/definitions/Contact'
 
   Contact:
@@ -102,11 +128,23 @@ definitions:
       company:
         type: string
 
+  ErrorModel:
+    type: object
+    required:
+    - msg
+    properties:
+      msg:
+        type: string
+        description: "Brief description of the error."
+
 securityDefinitions:
-  api_key:
+  Token:
     type: apiKey
     name: Authorization
     in: header
+    description: >
+      Once obtained through /accounts/login method, token may be used in subsequent requests to
+      protected methods in the form of `Authorization: Token <your_token>` header.
 
 tags:
 - name: "account"
