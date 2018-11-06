@@ -93,20 +93,23 @@ definitions:
   User:
     type: object
     required:
-    - user_id
-    - user_location
+    - id
+    - location
     - email
     - contacts
     properties:
-      user_id:
+      id:
         type: integer
-      user_location:
+      location:
         type: string
       email:
         type: string
         format: email
       contacts:
         $ref: '#/definitions/Contact'
+      avatar_url:
+        type: string
+        format: uri
 
   Contact:
     type: object
