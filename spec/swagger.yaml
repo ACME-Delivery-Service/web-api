@@ -210,14 +210,14 @@ definitions:
     type: object
     required:
     - id
-    - location
+    - region
     - email
     - contacts
     properties:
       id:
         type: integer
-      location:
-        type: string
+      region:
+        $ref: '#/definitions/Region'
       email:
         type: string
         format: email
@@ -342,6 +342,14 @@ definitions:
     - 'en_route'
     - 'stored'
     - 'delivered'
+
+  Region:
+    type: string
+    enum:
+    - 'EU'
+    - 'RU'
+    - 'CH'
+    - 'UK'
 
   ErrorModel:
     type: object
