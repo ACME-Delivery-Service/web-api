@@ -134,17 +134,13 @@ paths:
           $ref: '#/responses/Unauthorized'
 
   /driver/{id}/pending-orders:
+    parameters:
+    - $ref: '#/parameters/DriverID'
     get:
       summary: "Get pending orders of given Control Operator."
       tags:
       - mobile
       - web
-      parameters:
-      - name: 'id'
-        in: path
-        required: true
-        type: integer
-        description: "Driver (a.k.a. Control Operator) ID"
       responses:
         '200':
           description: "OK"
@@ -164,20 +160,14 @@ paths:
         '401':
           $ref: '#/responses/Unauthorized'
 
-
-
   /driver/{id}/current-orders:
+    parameters:
+    - $ref: '#/parameters/DriverID'
     get:
       summary: "Get currrent orders of given Control Operator."
       tags:
       - mobile
       - web
-      parameters:
-      - name: 'id'
-        in: path
-        required: true
-        type: integer
-        description: "Driver (a.k.a. Control Operator) ID"
       responses:
         '200':
           description: "OK"
@@ -196,6 +186,15 @@ paths:
                   $ref: '#/definitions/Order'
         '401':
           $ref: '#/responses/Unauthorized'
+
+parameters:
+  DriverID:
+    name: 'id'
+    in: path
+    required: true
+    type: integer
+    description: "Driver (a.k.a. Control Operator) ID"
+
 
 produces:
 - 'application/json'
