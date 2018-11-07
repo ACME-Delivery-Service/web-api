@@ -208,6 +208,47 @@ paths:
         '401':
           $ref: '#/responses/Unauthorized'
 
+  /driver/{id}/location:
+    parameters:
+    - $ref: '#/parameters/DriverID'
+    get:
+      summary: "Get last known location and time of given driver (a.k.a. Delivery Operator)."
+      tags:
+      - mobile
+      - web
+      responses:
+        '200':
+          description: "OK"
+          schema:
+            $ref: '#/definitions/DeliveryOperator'
+        '401':
+          $ref: '#/responses/Unauthorized'
+    post:
+      summary: "Update last known location (with current timestamp) for given driver (a.k.a. Delivery Operator)."
+      tags:
+      - mobile
+      - web
+      consumes:
+      - 'multipart/form-data'
+      parameters:
+      - name: 'longitude'
+        in: formData
+        type: number
+        required: true
+      - name: 'latitude'
+        in: formData
+        type: number
+        required: true
+      responses:
+        '200':
+          description: "Updated"
+          schema:
+            $ref: '#/definitions/DeliveryOperator'
+        '400':
+          description: "Invalid parameters"
+        '401':
+          $ref: '#/responses/Unauthorized'
+
 parameters:
   DriverID:
     name: 'id'
