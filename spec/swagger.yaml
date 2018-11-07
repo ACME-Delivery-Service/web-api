@@ -133,6 +133,24 @@ paths:
         '401':
           $ref: '#/responses/Unauthorized'
 
+  /driver/{id}/info:
+    parameters:
+    - $ref: '#/parameters/DriverID'
+    get:
+      summary: ""
+      tags:
+      - mobile
+      - web
+      responses:
+        '200':
+          description: "OK"
+          schema:
+            allOf:
+            - $ref: '#/definitions/User'
+            - $ref: '#/definitions/DeliveryOperator'
+        '401':
+          $ref: '#/responses/Unauthorized'
+
   /driver/{id}/pending-orders:
     parameters:
     - $ref: '#/parameters/DriverID'
@@ -350,6 +368,19 @@ definitions:
     - 'RU'
     - 'CH'
     - 'UK'
+
+  DeliveryOperator:
+    description: "Delivery Operator extension for User object."
+    type: object
+    required:
+    - location
+    - location_update_time
+    properties:
+      location:
+        $ref: '#/definitions/Location'
+      location_update_time:
+        type: string
+        format: 'date-time'
 
   ErrorModel:
     type: object
