@@ -29,8 +29,6 @@ paths:
       - name: 'password'
         in: formData
         type: string
-      produces:
-      - 'application/json'
       # Override: this particular method does not require any top-level security scheme.
       security: []
       responses:
@@ -64,7 +62,9 @@ paths:
       - account
       responses:
         '200':
-          description: "Current user succesfully logged out of system."
+          description: >
+            Current user succesfully logged out of system.
+            Authorization token will no longer be valid.
         '401':
           $ref: '#/responses/Unauthorized'
 
@@ -73,8 +73,6 @@ paths:
       summary: "Get information about current user."
       tags:
       - account
-      produces:
-      - 'application/json'
       responses:
         '200':
           description: "OK"
@@ -82,6 +80,61 @@ paths:
             $ref: '#/definitions/User'
         '401':
           $ref: '#/responses/Unauthorized'
+
+  /orders/list:
+    get:
+      summary: "Get filtered list of orders."
+      tags:
+      - web
+      consumes:
+      - 'multipart/form-data'
+      parameters:
+      - name: 'offset'
+        in: formData
+        type: integer
+        required: false
+      - name: 'limit'
+        in: formData
+        type: integer
+        required: false
+      responses:
+        '200':
+          description: "OK"
+          schema:
+            type: object
+            required:
+            - total_count
+            - results
+            properties:
+              total_count:
+                type: integer
+                description: "Total count of objects after filtering but before pagination."
+              results:
+                type: array
+                items:
+                  $ref: '#/definitions/OrderDelivery'
+        '400':
+          description: "Bad request"
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '401':
+          $ref: '#/responses/Unauthorized'
+
+  /driver/co-contact:
+    get:
+      summary: "Get contacts of available Control Operator for driver's current location."
+      tags:
+      - mobile
+      responses:
+        '200':
+          description: "OK"
+          schema:
+            $ref: '#/definitions/User'
+        '401':
+          $ref: '#/responses/Unauthorized'
+
+produces:
+- 'application/json'
 
 responses:
   Unauthorized:
@@ -131,6 +184,75 @@ definitions:
       company:
         type: string
 
+  OrderDelivery:
+    type: object
+    required:
+    - id
+    - delivery_period
+    - priority
+    - address_from
+    - address_to
+    - status
+    - is_assigned
+    properties:
+      id:
+        type: integer
+      delivery_period:
+        $ref: '#/definitions/TimeSpan'
+      priority:
+        type: integer
+      address_from:
+        $ref: '#/definitions/Address'
+      address_to:
+        $ref: '#/definitions/Address'
+      status:
+        $ref: '#/definitions/OrderStatus'
+      is_assigned:
+        type: boolean
+      delivery_operator:
+        $ref: '#/definitions/User'
+
+  TimeSpan:
+    type: object
+    required:
+    - start
+    - end
+    properties:
+      start:
+        type: string
+        format: date-time
+      end:
+        type: string
+        format: date-time
+
+  Address:
+    type: object
+    required:
+    - address
+    - location
+    properties:
+      address:
+        type: string
+      location:
+        type: object
+        required:
+        - latitude
+        - longitude
+        properties:
+          latitude:
+            type: integer
+          longitude:
+            type: integer
+
+  OrderStatus:
+    type: string
+    enum:
+    - 'created'
+    - 'approved'
+    - 'en_route'
+    - 'stored'
+    - 'delivered'
+
   ErrorModel:
     type: object
     required:
@@ -153,3 +275,9 @@ tags:
 - name: "account"
   description: |
     Methods related to account/session management.
+- name: "mobile"
+  description: |
+    Methods related to mobile application for Delivery Operators.
+- name: "web"
+  description: |
+    Methods related to web-app functionality.
