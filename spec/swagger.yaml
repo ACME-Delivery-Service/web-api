@@ -137,7 +137,7 @@ paths:
     parameters:
     - $ref: '#/parameters/DriverID'
     get:
-      summary: ""
+      summary: "Get information about given driver."
       tags:
       - mobile
       - web
@@ -145,6 +145,9 @@ paths:
         '200':
           description: "OK"
           schema:
+            description: >
+              All usual User's fields plus Delivery Operator specific
+              `location` and `location_update_time` objects.
             allOf:
             - $ref: '#/definitions/User'
             - $ref: '#/definitions/DeliveryOperator'
