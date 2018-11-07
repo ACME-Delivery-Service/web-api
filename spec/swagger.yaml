@@ -350,9 +350,9 @@ definitions:
     - longitude
     properties:
       latitude:
-        type: integer
+        type: number
       longitude:
-        type: integer
+        type: number
 
 
   OrderStatus:
