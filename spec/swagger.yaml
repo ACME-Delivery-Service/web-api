@@ -158,7 +158,7 @@ paths:
     parameters:
     - $ref: '#/parameters/DriverID'
     get:
-      summary: "Get pending orders of given Control Operator."
+      summary: "Get pending orders of given Delivery Operator."
       tags:
       - mobile
       - web
@@ -185,7 +185,7 @@ paths:
     parameters:
     - $ref: '#/parameters/DriverID'
     get:
-      summary: "Get currrent orders of given Control Operator."
+      summary: "Get currrent orders of given Delivery Operator."
       tags:
       - mobile
       - web
@@ -214,7 +214,7 @@ parameters:
     in: path
     required: true
     type: integer
-    description: "Driver (a.k.a. Control Operator) ID"
+    description: "Driver (a.k.a. Delivery Operator) ID"
 
 
 produces:
