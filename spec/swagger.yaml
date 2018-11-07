@@ -320,15 +320,19 @@ definitions:
       address:
         type: string
       location:
-        type: object
-        required:
-        - latitude
-        - longitude
-        properties:
-          latitude:
-            type: integer
-          longitude:
-            type: integer
+        $ref: '#/definitions/Location'
+
+  Location:
+    type: object
+    required:
+    - latitude
+    - longitude
+    properties:
+      latitude:
+        type: integer
+      longitude:
+        type: integer
+
 
   OrderStatus:
     type: string
