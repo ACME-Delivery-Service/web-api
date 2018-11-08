@@ -81,7 +81,7 @@ paths:
         '401':
           $ref: '#/responses/Unauthorized'
 
-  /orders/list:
+  /order/list:
     get:
       summary: "Get filtered list of orders."
       tags:
