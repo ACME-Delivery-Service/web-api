@@ -135,7 +135,12 @@ paths:
         '200':
           description: "OK"
           schema:
-            $ref: '#/definitions/User'
+            type: object
+            required:
+            - operator
+            properties:
+              operator:
+                $ref: '#/definitions/User'
         '401':
           $ref: '#/responses/Unauthorized'
 
