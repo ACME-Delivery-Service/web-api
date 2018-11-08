@@ -167,7 +167,6 @@ paths:
       summary: "Get pending orders of given Delivery Operator."
       tags:
       - mobile
-      - web
       responses:
         '200':
           description: "OK"
@@ -194,7 +193,6 @@ paths:
       summary: "Get current orders of given Delivery Operator."
       tags:
       - mobile
-      - web
       responses:
         '200':
           description: "OK"
@@ -233,7 +231,6 @@ paths:
       summary: "Update last known location (with current timestamp) for given driver (a.k.a. Delivery Operator)."
       tags:
       - mobile
-      - web
       consumes:
       - 'multipart/form-data'
       parameters:
