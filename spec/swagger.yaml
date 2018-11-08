@@ -81,6 +81,27 @@ paths:
         '401':
           $ref: '#/responses/Unauthorized'
 
+  /order/{id}/info:
+    parameters:
+    - $ref: '#/parameters/OrderID'
+    get:
+      summary: "Get detailed info about a delivery order."
+      description: >
+        To get full information about a delivery order, delivery operator would
+        want to have a screen that contains all the information about a
+        delivery order.
+      tags:
+      - mobile
+      responses:
+        '200':
+          description: "OK"
+          schema:
+            $ref: '#/definitions/OrderDelivery'
+        '404':
+          $ref: '#/responses/OrderNotFound'
+        '401':
+          $ref: '#/responses/Unauthorized'
+
   /order/list:
     get:
       summary: "Get filtered list of orders."
@@ -123,6 +144,65 @@ paths:
           description: "Bad request"
           schema:
             $ref: '#/definitions/ErrorModel'
+        '401':
+          $ref: '#/responses/Unauthorized'
+
+  /order/{id}/status:
+    parameters:
+    - $ref: '#/parameters/OrderID'
+    get:
+      summary: "Get delivery order status."
+      description: >
+        This is a simple lightweight status-only version of `/order/{id}/info`.
+      tags:
+      - mobile
+      - web
+      responses:
+        '200':
+          description: "OK"
+          schema:
+            type: object
+            required:
+            - status
+            properties:
+              status:
+                $ref: '#/definitions/OrderStatus'
+        '404':
+          $ref: '#/responses/OrderNotFound'
+        '401':
+          $ref: '#/responses/Unauthorized'
+
+  /order/{id}/status/{status}:
+    parameters:
+    - $ref: '#/parameters/OrderID'
+    post:
+      summary: "Update delivery order status."
+      description: >
+        For time tracking purposes, delivery operators want to mark a delivery
+        order as being in process, i.e. explicitly say, that they’re in the
+        process of executing that particular delivery order. Several delivery
+        orders could be marked as current by a single delivery operator
+        simultaneously in case the orders are to be delivered in the same
+        neighbourhood, for example.
+      tags:
+      - mobile
+      parameters:
+      - name: 'status'
+        in: path
+        required: true
+        type: string
+        enum:
+        - 'created'
+        - 'approved'
+        - 'en_route'
+        - 'stored'
+        - 'delivered'
+        # $ref: '#/definitions/OrderStatus'
+      responses:
+        '200':
+          description: "Updated"
+        '404':
+          $ref: '#/responses/OrderNotFound'
         '401':
           $ref: '#/responses/Unauthorized'
 
@@ -265,6 +345,12 @@ parameters:
     type: integer
     description: "Driver (a.k.a. Delivery Operator) ID"
 
+  OrderID:
+    name: 'id'
+    in: path
+    required: true
+    type: integer
+    description: "Order ID"
 
 produces:
 - 'application/json'
@@ -272,6 +358,11 @@ produces:
 responses:
   Unauthorized:
     description: "Unauthorized: User not logged in."
+    schema:
+      $ref: '#/definitions/ErrorModel'
+
+  OrderNotFound:
+    description: "Order not found"
     schema:
       $ref: '#/definitions/ErrorModel'
 
