@@ -1,0 +1,211 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "ACME Delivery service backend API",
+    "license": {
+      "name": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    }
+  },
+  "schemes": [
+    "https"
+  ],
+  "host": "backend.acme-company.site",
+  "basePath": "/",
+  "security": [
+    {
+      "Token": []
+    }
+  ],
+  "paths": {
+    "/account/login": {
+      "post": {
+        "summary": "Authenticate user with login name and password.",
+        "tags": [
+          "account"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "formData",
+            "type": "string"
+          },
+          {
+            "name": "password",
+            "in": "formData",
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "User succesfully logged in.",
+            "schema": {
+              "type": "object",
+              "required": [
+                "token"
+              ],
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "description": "Authorization token to be used in the `Authorization` header for secured endpoints.\n"
+                }
+              }
+            },
+            "examples": {
+              "token": "4296c04b40a2e4da526f55d7b1f1dbc358a613b4"
+            }
+          },
+          "400": {
+            "description": "Bad request or invalid credentials",
+            "schema": {
+              "$ref": "#/definitions/ErrorModel"
+            },
+            "examples": {
+              "Bad Request": {
+                "msg": "Please provide both email and password"
+              },
+              "Invalid Credentials": {
+                "msg": "Invalid login credentials"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/account/logout": {
+      "post": {
+        "summary": "Log out current user.",
+        "tags": [
+          "account"
+        ],
+        "responses": {
+          "200": {
+            "description": "Current user succesfully logged out of system."
+          },
+          "401": {
+            "$ref": "#/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/account/info": {
+      "get": {
+        "summary": "Get information about current user.",
+        "tags": [
+          "account"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "401": {
+            "$ref": "#/responses/Unauthorized"
+          }
+        }
+      }
+    }
+  },
+  "responses": {
+    "Unauthorized": {
+      "description": "Unauthorized: User not logged in.",
+      "schema": {
+        "$ref": "#/definitions/ErrorModel"
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "required": [
+        "user_id",
+        "user_location",
+        "email",
+        "contacts"
+      ],
+      "properties": {
+        "user_id": {
+          "type": "integer"
+        },
+        "user_location": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "contacts": {
+          "$ref": "#/definitions/Contact"
+        }
+      }
+    },
+    "Contact": {
+      "type": "object",
+      "required": [
+        "phone_number"
+      ],
+      "properties": {
+        "address": {
+          "type": "string"
+        },
+        "phone_number": {
+          "type": "string"
+        },
+        "additional_info": {
+          "type": "string"
+        },
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "position": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        }
+      }
+    },
+    "ErrorModel": {
+      "type": "object",
+      "required": [
+        "msg"
+      ],
+      "properties": {
+        "msg": {
+          "type": "string",
+          "description": "Brief description of the error."
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Token": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Once obtained through /accounts/login method, token may be used in subsequent requests to protected methods in the form of `Authorization: Token <your_token>` header.\n"
+    }
+  },
+  "tags": [
+    {
+      "name": "account",
+      "description": "Methods related to account/session management.\n"
+    }
+  ]
+}
